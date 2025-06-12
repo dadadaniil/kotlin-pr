@@ -17,6 +17,14 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            // Make sure we use a compatible version of kotlinx.serialization
+            version("kotlinxSerialization", "1.5.1")
+            // Make sure we use a compatible version of javapoet
+            library("javapoet", "com.squareup", "javapoet").version("1.13.0")
+        }
+    }
 }
 
 rootProject.name = "Network"

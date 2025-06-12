@@ -1,9 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.ksp)
 }
+
+applyDependencyManagement()
 
 android {
     namespace = "com.example.catapi"
@@ -42,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -61,18 +63,26 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    
+    // Compose Compiler
+    implementation(libs.androidx.compose.compiler)
 
     // Networking
     implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization)
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation(libs.okhttp.logging)
-    implementation(libs.kotlinx.serialization.json)
+    implementation("com.google.code.gson:gson:2.10")
 
     // Image loading
     implementation(libs.coil.compose)
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Dependency Injection
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

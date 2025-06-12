@@ -23,12 +23,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.catapi.R
-import com.example.network.data.model.CatImageModel
+import com.example.network.domain.model.Cat
+import com.example.network.domain.model.Breed
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatCard(
-    cat: CatImageModel,
+    cat: Cat,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -41,7 +42,7 @@ fun CatCard(
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(cat.url)
+                    .data(cat.imageUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = "Cat image",
@@ -68,7 +69,7 @@ fun CatCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            cat.breeds.firstOrNull()?.let { breed ->
+            cat.breed?.let { breed ->
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = breed.name,
@@ -99,10 +100,16 @@ fun CatCard(
 @Preview
 @Composable
 fun CatCardPreview() = CatCard(
-    cat = CatImageModel(
+    cat = Cat(
         id = "123",
-        url = "https://placekitten.com/200/300",
+        imageUrl = "https://placekitten.com/200/300",
         width = 200,
-        height = 300
+        height = 300,
+        breed = Breed(
+            id = "abys",
+            name = "Abyssinian",
+            temperament = "Active, Energetic, Independent, Intelligent, Gentle",
+            description = "The Abyssinian is easy to care for, and a joy to have in your home. They're affectionate cats and love both people and other animals."
+        )
     )
 )

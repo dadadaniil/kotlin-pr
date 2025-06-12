@@ -1,10 +1,11 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
-}
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 
-allprojects {
+/**
+ * Custom dependency management to handle version conflicts
+ */
+fun Project.applyDependencyManagement() {
     configurations.all {
         resolutionStrategy {
             force("com.squareup:javapoet:1.13.0")
@@ -12,4 +13,4 @@ allprojects {
             force("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
         }
     }
-}
+} 

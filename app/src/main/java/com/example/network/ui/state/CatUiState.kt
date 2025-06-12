@@ -1,9 +1,10 @@
 package com.example.network.ui.state
 
-import com.example.network.data.model.CatImageModel
+import com.example.network.domain.model.Cat
 
 data class CatUiState(
-    val cats: List<CatImageModel> = emptyList(),
+    val cats: List<Cat> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val selectedBreedId: String? = null
 )

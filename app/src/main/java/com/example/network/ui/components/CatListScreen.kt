@@ -25,14 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.network.ui.viewmodel.CatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatListScreen() {
 
-    val viewModel: CatViewModel = viewModel()
+    val viewModel: CatViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -85,7 +85,7 @@ fun CatListScreen() {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Button(
-                            onClick = { viewModel.loadRandomCats() }
+                            onClick = { viewModel.retry() }
                         ) {
                             Text("Retry")
                         }

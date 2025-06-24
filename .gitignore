@@ -1,0 +1,10 @@
+# Ignore IDE and build system folders
+.gradle/
+.idea/
+local.properties
+# Build outputs
+**/build/
+# MacOS artifact
+.DS_Store
+# Kotlin build
+buildSrc/build/

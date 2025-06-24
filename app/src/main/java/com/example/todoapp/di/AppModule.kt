@@ -1,6 +1,7 @@
 package com.example.todoapp.di
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import androidx.room.Room
 import com.example.todoapp.data.local.AppDatabase
 import com.example.todoapp.data.local.TaskDao
@@ -44,7 +45,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): AppDatabase =
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "tasks.db").build()
 
     @Provides

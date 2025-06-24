@@ -8,11 +8,11 @@ plugins {
 applyDependencyManagement()
 
 android {
-    namespace = "com.example.catapi"
+    namespace = "com.example.todoapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.catapi"
+        applicationId = "com.example.todoapp"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -73,6 +73,13 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation("com.google.code.gson:gson:2.10")
 
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    implementation(libs.coroutines.core)
+
     // Image loading
     implementation(libs.coil.compose)
 
@@ -85,6 +92,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

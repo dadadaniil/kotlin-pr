@@ -65,7 +65,6 @@ dependencies {
     implementation(libs.androidx.material3)
     
     // Compose Compiler
-    implementation(libs.androidx.compose.compiler)
 
     // Networking
     implementation(libs.retrofit)

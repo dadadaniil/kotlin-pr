@@ -44,13 +44,18 @@ fun CatListScreen() {
     val listState = rememberLazyListState()
     
     // Check if we need to load more items
-    val shouldLoadMore by remember {
+    val shouldLoadMore by remember(uiState) {
         derivedStateOf {
-            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-            val totalItems = listState.layoutInfo.totalItemsCount
-            val shouldLoad = lastVisibleItem >= totalItems - 5 && !uiState.isLoadingMore && uiState.hasMoreItems
-            Log.d(TAG, "Scroll check - lastVisibleItem: $lastVisibleItem, totalItems: $totalItems, shouldLoad: $shouldLoad")
-            shouldLoad
+            val loaded = uiState as? com.example.network.ui.state.CatUiState.Loaded
+            if (loaded != null) {
+                val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                val totalItems = listState.layoutInfo.totalItemsCount
+                val shouldLoad = lastVisibleItem >= totalItems - 5 && !loaded.isLoadingMore && loaded.hasMoreItems
+                Log.d(TAG, "Scroll check - lastVisibleItem: $lastVisibleItem, totalItems: $totalItems, shouldLoad: $shouldLoad")
+                shouldLoad
+            } else {
+                false
+            }
         }
     }
     
@@ -81,8 +86,8 @@ fun CatListScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            when {
-                uiState.isLoading && uiState.cats.isEmpty() -> {
+            when (val state = uiState) {
+                is com.example.network.ui.state.CatUiState.Loading -> {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,14 +99,14 @@ fun CatListScreen() {
                     }
                 }
 
-                uiState.errorMessage != null && uiState.cats.isEmpty() -> {
+                is com.example.network.ui.state.CatUiState.Error -> {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Error: ${uiState.errorMessage}",
+                            text = "Error: ${state.message}",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center
@@ -115,38 +120,38 @@ fun CatListScreen() {
                     }
                 }
 
-                uiState.cats.isEmpty() -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "No cats found",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-
-                else -> {
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(uiState.cats) { cat ->
-                            CatCard(cat = cat)
+                is com.example.network.ui.state.CatUiState.Loaded -> {
+                    if (state.cats.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No cats found",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
                         }
-                        
-                        if (uiState.isLoadingMore) {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator()
+                    } else {
+                        LazyColumn(
+                            state = listState,
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(state.cats) { cat ->
+                                CatCard(cat = cat)
+                            }
+
+                            if (state.isLoadingMore) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
                                 }
                             }
                         }

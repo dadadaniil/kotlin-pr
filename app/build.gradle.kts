@@ -69,9 +69,10 @@ dependencies {
 
     // Networking
     implementation(libs.retrofit)
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(libs.retrofit.moshi)
     implementation(libs.okhttp.logging)
-    implementation("com.google.code.gson:gson:2.10")
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
 
     // Image loading
     implementation(libs.coil.compose)
